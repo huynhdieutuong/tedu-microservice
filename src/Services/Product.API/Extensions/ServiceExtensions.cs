@@ -1,7 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Contracts.Common.Interfaces;
+using Infrastructure.Common;
+using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Product.API.Persistence;
+using Product.API.Repositories;
+using Product.API.Repositories.Interfaces;
 
 namespace Product.API.Extensions
 {
@@ -15,6 +19,8 @@ namespace Product.API.Extensions
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.ConfigureProductDbContext(configuration);
+            services.AddInfrastructrueService();
+            services.AddAutoMapper(cfg => cfg.AddProfile(new MappingProfile()));
         }
 
         private static void ConfigureProductDbContext(this IServiceCollection services, IConfiguration configuration)
@@ -28,6 +34,13 @@ namespace Product.API.Extensions
                     e.MigrationsAssembly("Product.API");
                     e.SchemaBehavior(MySqlSchemaBehavior.Ignore);
                 }));
+        }
+
+        private static void AddInfrastructrueService(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBaseAsync<,,>))
+                    .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
+                    .AddScoped<IProductRepository, ProductRepository>();
         }
     }
 }
