@@ -8,8 +8,8 @@ services:
   productdb:
     image: mysql:8.0.29
   
-  #customerdb:
-  #  image: postgres:alpine3.16
+  customerdb:
+    image: postgres:alpine3.16
 
   #basketdb:
   #  image: redis:alpine
@@ -24,8 +24,8 @@ services:
   #rabbitmq:
   #  image: rabbitmq:3-management-alpine
 
-  #pgadmin:
-  #  image: dpage/pgadmin4
+  pgadmin:
+    image: dpage/pgadmin4
 
   portainer:
     image: portainer/portainer-ce
@@ -55,8 +55,8 @@ volumes:
   #  name: sqlserver_data
   mysql_data:
     name: mysql_data
-  #postgres_data:
-  #  name: postgres_data
+  postgres_data:
+    name: postgres_data
   portainer_data:
     name: portainer_data
   #elasticsearch_data:
@@ -67,7 +67,7 @@ volumes:
   #  name: mongo_data
   #hangfire_mongo_data:
   #  name: hangfire_mongo_data
-  #pgadmin_data:
-  #  name: pgadmin_data
+  pgadmin_data:
+    name: pgadmin_data
   #rabbitmq_data:
   #  name: rabbitmq_data
