@@ -26,17 +26,11 @@ namespace Infrastructure.Common
         {
             var items = FindAll(trackChanges);
             items = includeProperties.Aggregate(items, (current, includeProperty) => current.Include(includeProperty));
-            //foreach (var includeProperty in includeProperties)
-            //{
-            //    items.Include(includeProperty);
-            //}
             return items;
         }
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false)
         {
-            //var items = FindAll(trackChanges);
-            //return items.Where(expression);
             return !trackChanges ? _dbContext.Set<T>().Where(expression).AsNoTracking() : _dbContext.Set<T>().Where(expression);
         }
 

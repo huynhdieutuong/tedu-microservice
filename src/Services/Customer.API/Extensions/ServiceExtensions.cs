@@ -1,4 +1,10 @@
-﻿using Customer.API.Persistence;
+﻿using Contracts.Common.Interfaces;
+using Customer.API.Persistence;
+using Customer.API.Repositories;
+using Customer.API.Repositories.Interfaces;
+using Customer.API.Services;
+using Customer.API.Services.Interfaces;
+using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Customer.API.Extensions
@@ -25,7 +31,10 @@ namespace Customer.API.Extensions
 
         private static void AddInfrastructureService(this IServiceCollection services)
         {
-
+            services.AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBaseAsync<,,>))
+                    .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
+                    .AddScoped<ICustomerRepository, CustomerRepository>()
+                    .AddScoped<ICustomerService, CustomerService>();
         }
     }
 }

@@ -1,4 +1,5 @@
 using Common.Logging;
+using Customer.API.Controllers;
 using Customer.API.Extensions;
 using Customer.API.Persistence;
 using Serilog;
@@ -17,7 +18,7 @@ try
 
     app.UseInfrastructure();
 
-    app.MapGet("/", () => "Welcome to Customer API!");
+    app.MapCustomersAPI();
 
     app.SeedCustomerData().Run();
 }
