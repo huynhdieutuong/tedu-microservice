@@ -1,6 +1,4 @@
-﻿using Customer.API.Repositories.Interfaces;
-using Customer.API.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Customer.API.Services.Interfaces;
 
 namespace Customer.API.Controllers
 {
@@ -14,37 +12,37 @@ namespace Customer.API.Controllers
                 return customer != null ? Results.Ok(customer) : Results.NotFound();
             });
 
-            app.MapGet("/api/customers", async (ICustomerService customerService) =>
-            {
-                var customers = await customerService.GetCustomersAsync();
-                return Results.Ok(customers);
-            });
+            //app.MapGet("/api/customers", async (ICustomerService customerService) =>
+            //{
+            //    var customers = await customerService.GetCustomersAsync();
+            //    return Results.Ok(customers);
+            //});
 
-            app.MapPost("api/customers", async (Entities.Customer customer, ICustomerRepository customerRepository) =>
-            {
-                await customerRepository.CreateAsync(customer);
-                await customerRepository.SaveChangeAsync();
-            });
+            //app.MapPost("api/customers", async (Entities.Customer customer, ICustomerRepository customerRepository) =>
+            //{
+            //    await customerRepository.CreateAsync(customer);
+            //    await customerRepository.SaveChangeAsync();
+            //});
 
-            app.MapDelete("api/customers/{id}", async (int id, ICustomerRepository customerRepository) =>
-            {
-                var customer = await customerRepository.FindByCondition(x => x.Id.Equals(id)).SingleOrDefaultAsync();
-                if (customer == null) return Results.NotFound();
+            //app.MapDelete("api/customers/{id}", async (int id, ICustomerRepository customerRepository) =>
+            //{
+            //    var customer = await customerRepository.FindByCondition(x => x.Id.Equals(id)).SingleOrDefaultAsync();
+            //    if (customer == null) return Results.NotFound();
 
-                await customerRepository.DeleteAsync(customer);
-                await customerRepository.SaveChangeAsync();
-                return Results.NoContent();
-            });
+            //    await customerRepository.DeleteAsync(customer);
+            //    await customerRepository.SaveChangeAsync();
+            //    return Results.NoContent();
+            //});
 
-            app.MapPut("api/customers/{id}", async (int id, Entities.Customer customer, ICustomerRepository customerRepository) =>
-            {
-                var existedCustomer = await customerRepository.FindByCondition(x => x.Id.Equals(id)).SingleOrDefaultAsync();
-                if (existedCustomer == null) return Results.NotFound();
-                customer.Id = existedCustomer.Id;
-                await customerRepository.UpdateAsync(customer);
-                await customerRepository.SaveChangeAsync();
-                return Results.Ok(customer);
-            });
+            //app.MapPut("api/customers/{id}", async (int id, Entities.Customer customer, ICustomerRepository customerRepository) =>
+            //{
+            //    var existedCustomer = await customerRepository.FindByCondition(x => x.Id.Equals(id)).SingleOrDefaultAsync();
+            //    if (existedCustomer == null) return Results.NotFound();
+            //    customer.Id = existedCustomer.Id;
+            //    await customerRepository.UpdateAsync(customer);
+            //    await customerRepository.SaveChangeAsync();
+            //    return Results.Ok(customer);
+            //});
         }
     }
 }
