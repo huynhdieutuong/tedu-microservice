@@ -42,12 +42,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-#  #basketdb: redis
-#  basketdb:
-#    container_name: basketdb
-#    restart: always
-#    ports:
-#      - "6379:6379"
+  #basketdb: redis
+  basketdb:
+    container_name: basketdb
+    restart: always
+    ports:
+      - "6379:6379"
   
 #  #inventorydb: mongo
 #  inventorydb:
