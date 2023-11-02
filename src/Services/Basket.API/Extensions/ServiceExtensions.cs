@@ -1,15 +1,21 @@
-﻿namespace Basket.API.Extensions
+﻿using Basket.API.Repositories;
+using Basket.API.Repositories.Interfaces;
+using Contracts.Common.Interfaces;
+using Infrastructure.Common;
+
+namespace Basket.API.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void AddInfrastructure(this IServiceCollection service, IConfiguration configuration)
+        public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            service.AddControllers();
-            service.AddEndpointsApiExplorer();
-            service.AddSwaggerGen();
+            services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+            services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
-            service.ConfigureRedis(configuration);
-            service.AddInfrastructureService();
+            services.ConfigureRedis(configuration);
+            services.AddInfrastructureService();
         }
 
         private static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
@@ -28,7 +34,8 @@
 
         private static void AddInfrastructureService(this IServiceCollection services)
         {
-
+            services.AddScoped<IBasketRepository, BasketRepository>()
+                    .AddTransient<ISerializerService, SerializerService>();
         }
     }
 }
