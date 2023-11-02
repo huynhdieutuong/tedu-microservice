@@ -20,7 +20,7 @@ namespace Basket.API.Extensions
 
         private static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
         {
-            var redisConnectionString = configuration.GetSection("CacheSetttings:ConnectionString").Value;
+            var redisConnectionString = configuration.GetSection("CacheSettings:ConnectionString").Value;
             if (string.IsNullOrEmpty(redisConnectionString))
             {
                 throw new ArgumentException("Redis Conenction string is not configured!");
