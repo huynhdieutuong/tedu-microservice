@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Contracts.Common.Interfaces
 {
-    public interface IRepositoryBaseAsync<T, K, TContext> : IRepositoryQueryBase<T, K, TContext>
-        where T : EntityBase<K>
-        where TContext : DbContext
+    public interface IRepositoryBaseAsync<T, K> : IRepositoryQueryBase<T, K>
+    where T : EntityBase<K>
     {
         Task<K> CreateAsync(T entity);
         Task<IList<K>> CreateListAsync(IEnumerable<T> entities);
@@ -19,5 +18,11 @@ namespace Contracts.Common.Interfaces
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task EndTransactionAsync();
         Task RollbackTransactionAsync();
+    }
+
+    public interface IRepositoryBaseAsync<T, K, TContext> : IRepositoryBaseAsync<T, K>
+        where T : EntityBase<K>
+        where TContext : DbContext
+    {
     }
 }
