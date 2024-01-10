@@ -70,16 +70,16 @@ services:
 #      MONGO_INITDB_ROOT_USERNAME: 'admin'
 #      MONGO_INITDB_ROOT_PASSWORD: 'admin'
 
-#  #infrastructure section
-#  rabbitmq:
-#    container_name: rabbitmq
-#    restart: always
-#    ports:
-#      - "5672:5672"
-#      - "15672:15672"
-#    volumes:
-#      - rabbitmq_data:/var/lib/rabbitmq
-#    hostname: rabbitmq
+ #infrastructure section
+  rabbitmq:
+   container_name: rabbitmq
+   restart: always
+   ports:
+     - "5672:5672"
+     - "15672:15672"
+   volumes:
+     - rabbitmq_data:/var/lib/rabbitmq
+   hostname: rabbitmq
 
   pgadmin:
     container_name: pgadmin

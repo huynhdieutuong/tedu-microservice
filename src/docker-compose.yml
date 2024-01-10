@@ -20,9 +20,9 @@ services:
   #hangfiredb:
   #  image: mongo
 
-  ##infrastructure section
-  #rabbitmq:
-  #  image: rabbitmq:3-management-alpine
+  #infrastructure section
+  rabbitmq:
+   image: rabbitmq:3-management-alpine
 
   pgadmin:
     image: dpage/pgadmin4
@@ -87,5 +87,5 @@ volumes:
   #  name: hangfire_mongo_data
   pgadmin_data:
     name: pgadmin_data
-  #rabbitmq_data:
-  #  name: rabbitmq_data
+  rabbitmq_data:
+   name: rabbitmq_data

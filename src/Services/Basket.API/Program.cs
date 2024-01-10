@@ -9,6 +9,7 @@ Log.Information("Starting Basket API up");
 try
 {
     builder.Host.UseSerilog(Serilogger.Configure);
+    builder.Host.AddAppConfigurations();
 
     builder.Services.AddInfrastructure(builder.Configuration);
 
