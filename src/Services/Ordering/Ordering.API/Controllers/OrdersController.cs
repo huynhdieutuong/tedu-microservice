@@ -1,10 +1,8 @@
-﻿using Contracts.Services;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.Application.Common.Models;
 using Ordering.Application.Features.V1.Orders;
-using Shared.Services.Email;
-using System.ComponentModel.DataAnnotations;
+using Shared.SeedWork.ApiResult;
 
 namespace Ordering.API.Controllers;
 
@@ -13,39 +11,50 @@ namespace Ordering.API.Controllers;
 public class OrdersController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly IEmailSMTPService _emailSMTPService;
 
-    public OrdersController(IMediator mediator, IEmailSMTPService emailSMTPService)
+    public OrdersController(IMediator mediator)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _emailSMTPService = emailSMTPService;
     }
 
     private static class RouteNames
     {
         public const string GetOrders = nameof(GetOrders);
+        public const string CreateOrder = nameof(CreateOrder);
+        public const string UpdateOrder = nameof(UpdateOrder);
+        public const string DeleteOrder = nameof(DeleteOrder);
     }
 
-    [HttpGet("{username}", Name = RouteNames.GetOrders)]
-    [ProducesResponseType(typeof(IEnumerable<OrderDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrdersByUserName([Required] string username)
+    [HttpGet("{userName}", Name = RouteNames.GetOrders)]
+    public async Task<ActionResult<ApiResult<List<OrderDto>>>> GetOrdersByUserName(string userName)
     {
-        var query = new GetOrderQuery(username);
+        var query = new GetOrderQuery(userName);
         var result = await _mediator.Send(query);
         return Ok(result);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> TestEmail()
+    #region CRUD
+    [HttpPost(Name = RouteNames.CreateOrder)]
+    public async Task<ActionResult<ApiResult<long>>> CreateOrder(CreateOrderCommand command)
     {
-        var message = new MailRequest
-        {
-            Body = "Hello",
-            Subject = "Test",
-            ToAddress = "yourEmail@gmail.com"
-        };
-        await _emailSMTPService.SendEmailAsync(message);
-
-        return Ok();
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
+
+    [HttpPut("{id:long}", Name = RouteNames.UpdateOrder)]
+    public async Task<ActionResult<ApiResult<OrderDto>>> UpdateOrder(long id, UpdateOrderCommand command)
+    {
+        command.SetId(id);
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:long}", Name = RouteNames.DeleteOrder)]
+    public async Task<ActionResult> DeleteOrder(long id)
+    {
+        var command = new DeleteOrderCommand(id);
+        await _mediator.Send(command);
+        return NoContent();
+    }
+    #endregion
 }
