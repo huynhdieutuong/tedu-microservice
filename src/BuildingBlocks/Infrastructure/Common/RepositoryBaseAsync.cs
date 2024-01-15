@@ -30,40 +30,46 @@ namespace Infrastructure.Common
         public Task RollbackTransactionAsync() =>
             _dbContext.Database.RollbackTransactionAsync();
 
-        public async Task<K> CreateAsync(T entity)
+        public async Task<K> CreateAsync(T entity, bool isSaveChange = false)
         {
             await _dbContext.Set<T>().AddAsync(entity);
+            if (isSaveChange) await SaveChangeAsync();
             return entity.Id;
         }
 
-        public async Task<IList<K>> CreateListAsync(IEnumerable<T> entities)
+        public async Task<IList<K>> CreateListAsync(IEnumerable<T> entities, bool isSaveChange = false)
         {
             await _dbContext.Set<T>().AddRangeAsync(entities);
+            if (isSaveChange) await SaveChangeAsync();
             return entities.Select(x => x.Id).ToList();
         }
 
-        public Task UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity, bool isSaveChange = false)
         {
-            if (_dbContext.Entry(entity).State == EntityState.Unchanged) return Task.CompletedTask;
+            if (_dbContext.Entry(entity).State == EntityState.Unchanged) return;
 
             T exist = _dbContext.Set<T>().Find(entity.Id);
             _dbContext.Entry(exist).CurrentValues.SetValues(entity);
-            return Task.CompletedTask;
+            if (isSaveChange) await SaveChangeAsync();
         }
 
-        public Task UpdateListAsync(IEnumerable<T> entities) =>
-            _dbContext.Set<T>().AddRangeAsync(entities);
+        public async Task UpdateListAsync(IEnumerable<T> entities, bool isSaveChange = false)
+        {
+            await _dbContext.Set<T>().AddRangeAsync(entities);
+            if (isSaveChange) await SaveChangeAsync();
+        }
 
-        public Task DeleteAsync(T entity)
+
+        public async Task DeleteAsync(T entity, bool isSaveChange = false)
         {
             _dbContext.Set<T>().Remove(entity);
-            return Task.CompletedTask;
+            if (isSaveChange) await SaveChangeAsync();
         }
 
-        public Task DeleteListAsync(IEnumerable<T> entities)
+        public async Task DeleteListAsync(IEnumerable<T> entities, bool isSaveChange = false)
         {
             _dbContext.Set<T>().RemoveRange(entities);
-            return Task.CompletedTask;
+            if (isSaveChange) await SaveChangeAsync();
         }
 
         public Task<int> SaveChangeAsync() => _unitOfWork.CommitAsync();
