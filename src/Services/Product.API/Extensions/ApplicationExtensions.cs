@@ -1,4 +1,6 @@
-﻿namespace Product.API.Extensions
+﻿using Infrastructure.Middlewares;
+
+namespace Product.API.Extensions
 {
     public static class ApplicationExtensions
     {
@@ -6,7 +8,8 @@
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-
+            app.UseMiddleware<ErrorWrappingMiddleware>();
+            app.UseAuthentication();
             app.UseRouting();
             //app.UseHttpsRedirection(); // for production only
 
