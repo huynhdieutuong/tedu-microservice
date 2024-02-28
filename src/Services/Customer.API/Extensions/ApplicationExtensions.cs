@@ -1,15 +1,18 @@
-﻿namespace Customer.API.Extensions
+﻿using Infrastructure.ScheduleJobs;
+
+namespace Customer.API.Extensions;
+
+public static class ApplicationExtensions
 {
-    public static class ApplicationExtensions
+    public static void UseInfrastructure(this IApplicationBuilder app, IConfiguration configuration)
     {
-        public static void UseInfrastructure(this IApplicationBuilder app)
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
-            //app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-        }
+        app.UseAuthorization();
+
+        app.UseHangfireDashboard(configuration);
     }
 }
