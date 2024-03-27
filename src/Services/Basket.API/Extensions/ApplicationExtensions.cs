@@ -1,4 +1,7 @@
-﻿namespace Basket.API.Extensions
+﻿using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+
+namespace Basket.API.Extensions
 {
     public static class ApplicationExtensions
     {
@@ -14,6 +17,11 @@
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
                 endpoints.MapDefaultControllerRoute();
             });
         }
