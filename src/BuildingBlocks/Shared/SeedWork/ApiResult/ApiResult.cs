@@ -6,10 +6,6 @@ public class ApiResult<T>
     public string Message { get; set; }
     public bool IsSucceeded { get; set; }
 
-    public ApiResult()
-    {
-    }
-
     public ApiResult(bool isSucceeded, string message = null)
     {
         Message = message;
